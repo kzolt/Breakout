@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "Tools/Log.h"
 
 namespace Breakout {
 
@@ -18,7 +19,8 @@ namespace Breakout {
 
 	void Application::Start()
 	{
-
+		Log::Init();
+		LOG_INFO("Log Initialized");
 	}
 
 	void Application::Run()
