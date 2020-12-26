@@ -1,7 +1,6 @@
-#include "Application.h"
+#include "bkout.h"
 
-#include "Tools/Log.h"
-#include "Tools/Assert.h"
+#include "Application.h"
 
 namespace Breakout {
 
