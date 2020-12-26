@@ -1,6 +1,9 @@
 #include "bkout.h"
 
+#include "System/Window.h"
 #include "VulkanContext.h"
+
+#include <vulkan/vulkan_win32.h>
 
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
 	VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
@@ -33,9 +36,11 @@ void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT
 
 namespace Breakout {
 
-	VulkanContext::VulkanContext()
+	VulkanContext::VulkanContext(Window* window)
 	{
+		/////////////////////////////////////
 		// Application Data Structures
+		/////////////////////////////////////
 		VkApplicationInfo appInfo{};
 		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 		appInfo.pApplicationName = "Breakout";
@@ -48,7 +53,9 @@ namespace Breakout {
 		createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 		createInfo.pApplicationInfo = &appInfo;
 
+		/////////////////////////////////////
 		// Extensions
+		/////////////////////////////////////
 		uint32_t extensionCount = 0;
 		std::vector<VkExtensionProperties> extensionProperties;
 		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
@@ -56,16 +63,23 @@ namespace Breakout {
 		extensionProperties.resize(extensionCount);
 		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensionProperties.data());
 
+#ifdef _DEBUG
 		LOG_TRACE("Extensions: ");
 		for (const auto& extension : extensionProperties)
 			LOG_TRACE(extension.extensionName);
+#endif
+
+		for (const auto& extension : extensionProperties)
+			m_Extensions.push_back(extension.extensionName);
 
 		m_Extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 		createInfo.enabledExtensionCount = static_cast<uint32_t>(m_Extensions.size());
 		createInfo.ppEnabledExtensionNames = m_Extensions.data();
 
 #ifdef ENABLE_VALIDATION_LAYERS
+		/////////////////////////////////////
 		// Validation Layers
+		/////////////////////////////////////
 		uint32_t layerCount;
 		vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
 
@@ -91,18 +105,51 @@ namespace Breakout {
 		ASSERT(!vkCreateInstance(&createInfo, nullptr, &m_Instance), "Could not create Vulkan Instance");
 
 #ifdef _DEBUG
+		/////////////////////////////////////
 		// Vulkan Debugger
+		/////////////////////////////////////
 		SetupDebugger();
 #endif
+		/////////////////////////////////////
+		// Create Windows Surface
+		/////////////////////////////////////
+		VkWin32SurfaceCreateInfoKHR surfaceCreateInfo{};
+		surfaceCreateInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+		surfaceCreateInfo.hwnd = window->GetHandle();
+		surfaceCreateInfo.hinstance = GetModuleHandle(nullptr);
 
+		ASSERT(!vkCreateWin32SurfaceKHR(m_Instance, &surfaceCreateInfo, nullptr, &m_Surface), "Failed to create window surface!");
+
+		/////////////////////////////////////
+		// Pick Physical Device
+		/////////////////////////////////////
+		uint32_t deviceCount = 0;
+		vkEnumeratePhysicalDevices(m_Instance, &deviceCount, nullptr);
+
+		ASSERT(deviceCount, "Failed to find GPUs with Vulkan Support");
+
+		std::vector<VkPhysicalDevice> devices(deviceCount);
+		vkEnumeratePhysicalDevices(m_Instance, &deviceCount, devices.data());
+
+		// Just use the first device we queried because breakout isn't graphically intensive at all, no point in doing anything else
+		m_PhysicalDevice = devices[0];
+		ASSERT(m_PhysicalDevice, "Failed to find a suitable GPU!");
+
+		/////////////////////////////////////
+		// Create Logical Device
+		/////////////////////////////////////
+		CreateDevice();
 	}
 
 	VulkanContext::~VulkanContext()
 	{
+		vkDestroyDevice(m_Device, nullptr);
+
 #ifdef ENABLE_VALIDATION_LAYERS
 		DestroyDebugUtilsMessengerEXT(m_Instance, m_DebugMessenger, nullptr);
 #endif
 
+		vkDestroySurfaceKHR(m_Instance, m_Surface, nullptr);
 		vkDestroyInstance(m_Instance, nullptr);
 	}
 
@@ -140,6 +187,54 @@ namespace Breakout {
 		createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
 		createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
 		createInfo.pfnUserCallback = debugCallback;
+	}
+
+	QueueFamilyIndices VulkanContext::FindQueueFamilies(VkPhysicalDevice device)
+	{
+		QueueFamilyIndices indices;
+
+		uint32_t queueFamilyCount = 0;
+		vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
+
+		std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
+		vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
+
+		int i = 0;
+		for (const auto& queueFamily : queueFamilies)
+		{
+			if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
+				indices.GraphicsFamily = i;
+
+			i++;
+		}
+
+		return indices;
+	}
+
+	void VulkanContext::CreateDevice()
+	{
+		QueueFamilyIndices indices = FindQueueFamilies(m_PhysicalDevice);
+
+		VkDeviceQueueCreateInfo queueCreateInfo{};
+		queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+		queueCreateInfo.queueFamilyIndex = indices.GraphicsFamily.value();
+		queueCreateInfo.queueCount = 1;
+
+		float queuePriority = 1.0f;
+		queueCreateInfo.pQueuePriorities = &queuePriority;
+
+		VkPhysicalDeviceFeatures deviceFeatures{};
+
+		VkDeviceCreateInfo createInfo{};
+		createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+		
+		createInfo.pQueueCreateInfos = &queueCreateInfo;
+		createInfo.queueCreateInfoCount = 1;
+
+		createInfo.pEnabledFeatures = &deviceFeatures;
+
+		ASSERT(!vkCreateDevice(m_PhysicalDevice, &createInfo, nullptr, &m_Device), "Could not create Device!");
+		vkGetDeviceQueue(m_Device, indices.GraphicsFamily.value(), 0, &m_GraphicsQueue);
 	}
 
 }

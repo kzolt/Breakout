@@ -29,7 +29,6 @@ namespace Breakout {
 	Window::Window(const WindowProps& props)
 		: m_WindowProps(props)
 	{
-		HWND hwnd;
 		HINSTANCE hInstance = NULL;
 		WNDCLASSEX wc;
 
@@ -45,7 +44,7 @@ namespace Breakout {
 
 		RegisterClassEx(&wc);
 
-		hwnd = CreateWindowEx(NULL,
+		m_HWND = CreateWindowEx(NULL,
 			wc.lpszClassName,
 			props.Name.c_str(),
 			WS_OVERLAPPEDWINDOW,
@@ -54,7 +53,7 @@ namespace Breakout {
 			NULL, NULL,
 			hInstance, NULL);
 
-		ShowWindow(hwnd, 1);
+		ShowWindow(m_HWND, 1);
 	}
 
 	Window::~Window()

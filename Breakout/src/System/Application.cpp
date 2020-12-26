@@ -26,7 +26,7 @@ namespace Breakout {
 
 		ASSERT(m_Window, "Unable to create window!");
 
-		m_Context = new VulkanContext();
+		m_Context = new VulkanContext(m_Window);
 		ASSERT(m_Context, "Could not create Context");
 	}
 

@@ -22,8 +22,11 @@ namespace Breakout {
 
 		void OnUpdate();
 
+		inline const HWND& GetHandle() const { return m_HWND; }
+
 	private:
 		WindowProps m_WindowProps;
+		HWND m_HWND;
 	};
 
 }
