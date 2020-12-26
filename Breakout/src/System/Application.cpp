@@ -1,5 +1,7 @@
 #include "Application.h"
+
 #include "Tools/Log.h"
+#include "Tools/Assert.h"
 
 namespace Breakout {
 
@@ -14,6 +16,7 @@ namespace Breakout {
 
 	Application::~Application()
 	{
+		delete m_Context;
 		delete m_Window;
 	}
 
@@ -21,6 +24,11 @@ namespace Breakout {
 	{
 		Log::Init();
 		LOG_INFO("Log Initialized");
+
+		ASSERT(m_Window, "Unable to create window!");
+
+		m_Context = new VulkanContext();
+		ASSERT(m_Context, "Could not create Context");
 	}
 
 	void Application::Run()

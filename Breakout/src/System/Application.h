@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Window.h"
+#include "Graphics/VulkanContext.h"
 
 namespace Breakout {
 
@@ -21,6 +22,7 @@ namespace Breakout {
 
 	private:
 		Window* m_Window;
+		VulkanContext* m_Context;
 
 		bool m_Running = true;
 

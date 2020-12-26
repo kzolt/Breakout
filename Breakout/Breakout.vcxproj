@@ -97,6 +97,7 @@
     <ClCompile Include="src\System\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Tools\Assert.h" />
     <ClInclude Include="src\Tools\Log.h" />
     <ClInclude Include="src\Graphics\VulkanContext.h" />
     <ClInclude Include="src\System\Application.h" />
