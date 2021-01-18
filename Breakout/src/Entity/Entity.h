@@ -12,8 +12,13 @@ namespace Breakout {
 			: m_DebugName(debugName), m_Position(position), m_Size(size), m_Color(color) {}
 
 		inline const glm::vec3& GetPosition() const { return m_Position; }
+		inline glm::vec3& GetPosition() { return m_Position; }
+
 		inline const glm::vec2& GetSize() const { return m_Size; }
+		inline glm::vec2& GetSize() { return m_Size; }
+		
 		inline const glm::vec4& GetColor() const { return m_Color; }
+		inline glm::vec4& GetColor() { return m_Color; }
 
 	private:
 		std::string m_DebugName;

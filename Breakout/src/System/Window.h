@@ -19,13 +19,18 @@ namespace Breakout {
 		Window(const WindowProps& windowProps = WindowProps());
 		~Window();
 
+		inline const WindowProps& GetWindowProps() const { return m_Props; }
+
 		bool IsRunning();
 
 		void OnUpdate(Timestep ts);
 		void OnRender();
 
+		std::pair<double, double> GetMousePos();
+
 	private:
 		GLFWwindow* m_Window;
+		WindowProps m_Props;
 
 	};
 

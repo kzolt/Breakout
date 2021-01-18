@@ -8,6 +8,7 @@
 namespace Breakout {
 
 	Window::Window(const WindowProps& windowProps)
+		: m_Props(windowProps)
 	{
 		ASSERT(glfwInit(), "Unable to Initalize GLFW");
 
@@ -37,6 +38,14 @@ namespace Breakout {
 	void Window::OnRender()
 	{
 		glfwSwapBuffers(m_Window);
+	}
+
+	std::pair<double, double> Window::GetMousePos()
+	{
+		double xpos, ypos;
+		glfwGetCursorPos(m_Window, &xpos, &ypos);
+
+		return { xpos, ypos };
 	}
 
 }

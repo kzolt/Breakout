@@ -6,9 +6,13 @@ namespace Breakout {
 
 	class Brick : public Entity
 	{
-		Brick(const glm::vec3& position, const glm::vec4& color)
-			: Entity("Brick", position, glm::vec2(20, 20), color) {}
+	public:
+		Brick(const glm::vec3& position, const glm::vec4& color, int health = 10)
+			: Entity("Brick", position, glm::vec2(5.0f, 1.0f), color), m_Health(health) {}
 		~Brick() {}
+
+	private:
+		int m_Health;
 	};
 
 }

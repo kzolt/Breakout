@@ -17,6 +17,7 @@ namespace Breakout {
 
 	public:
 		inline static Application* GetApp() { return s_App; }
+		inline static Window* GetWindow() { return Application::GetApp()->m_Window; }
 
 	private:
 		Window* m_Window;

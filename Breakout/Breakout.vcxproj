@@ -121,7 +121,6 @@
     <ClInclude Include="src\Renderer\Camera.h" />
     <ClInclude Include="src\Renderer\Renderer.h" />
     <ClInclude Include="src\Renderer\Shader.h" />
-    <ClInclude Include="src\Scene\Layers\Layer.h" />
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\System\Window.h" />
     <ClInclude Include="src\Tools\Assert.h" />

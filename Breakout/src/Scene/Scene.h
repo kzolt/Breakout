@@ -32,12 +32,6 @@ namespace Breakout {
 
 		Camera* m_Camera;
 		Shader* m_Shader;
-
-		// TODO: Remove
-		std::shared_ptr<VertexArray> m_VA;
-		std::shared_ptr<VertexBuffer> m_VBO;
-		std::shared_ptr<IndexBuffer> m_IB;
-
 	};
 
 }
