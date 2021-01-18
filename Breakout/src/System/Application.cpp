@@ -1,6 +1,9 @@
 #include "bkout.h"
 
 #include "Application.h"
+#include "Renderer/Renderer.h"
+
+#include <glfw/glfw3.h>
 
 namespace Breakout {
 
@@ -25,6 +28,8 @@ namespace Breakout {
 		m_Window = new Window();
 		ASSERT(m_Window, "Unable to create window!");
 
+		Renderer::Init();
+
 		m_Scene = new Scene();
 	}
 
@@ -32,9 +37,13 @@ namespace Breakout {
 	{
 		while (m_Window->IsRunning())
 		{
-			m_Window->OnUpdate();
+			float time = (float)glfwGetTime();
+			Timestep timestep = time - m_LastFrameTime;
+			m_LastFrameTime = time;
 
-			m_Scene->OnUpdate();
+			m_Window->OnUpdate(timestep);
+
+			m_Scene->OnUpdate(timestep);
 			m_Scene->OnRender();
 
 			m_Window->OnRender();
@@ -43,7 +52,7 @@ namespace Breakout {
 
 	void Application::Stop()
 	{
-
+		Renderer::Shutdown();
 	}
 
 }

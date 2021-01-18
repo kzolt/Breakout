@@ -98,7 +98,9 @@
     </ClCompile>
     <ClCompile Include="src\Graphics\Buffer.cpp" />
     <ClCompile Include="src\Graphics\VertexArray.cpp" />
+    <ClCompile Include="src\Renderer\Camera.cpp" />
     <ClCompile Include="src\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Renderer\Shader.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\System\Window.cpp" />
     <ClCompile Include="src\Tools\Log.cpp" />
@@ -116,13 +118,20 @@
     <ClInclude Include="src\Entity\Paddle.h" />
     <ClInclude Include="src\Graphics\Buffer.h" />
     <ClInclude Include="src\Graphics\VertexArray.h" />
+    <ClInclude Include="src\Renderer\Camera.h" />
     <ClInclude Include="src\Renderer\Renderer.h" />
+    <ClInclude Include="src\Renderer\Shader.h" />
+    <ClInclude Include="src\Scene\Layers\Layer.h" />
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\System\Window.h" />
     <ClInclude Include="src\Tools\Assert.h" />
     <ClInclude Include="src\Tools\Log.h" />
     <ClInclude Include="src\System\Application.h" />
+    <ClInclude Include="src\Tools\Timestep.h" />
     <ClInclude Include="vendor\GLAD\include\glad\glad.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\basic.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

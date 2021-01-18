@@ -21,7 +21,7 @@ namespace Breakout {
 
 		bool IsRunning();
 
-		void OnUpdate();
+		void OnUpdate(Timestep ts);
 		void OnRender();
 
 	private:

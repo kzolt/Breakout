@@ -102,6 +102,7 @@ namespace Breakout {
 	{
 	public:
 		VertexBuffer(void* data, size_t size);
+		VertexBuffer(size_t size);
 		~VertexBuffer();
 
 		void Bind();
@@ -124,18 +125,18 @@ namespace Breakout {
 	class IndexBuffer
 	{
 	public:
-		IndexBuffer(void* data, size_t size);
+		IndexBuffer(void* data, uint32_t count);
 		~IndexBuffer();
 
 		void Bind();
 
-		void SetData(void* data, size_t size, uint32_t offset = 0);
+		void SetData(void* data, uint32_t count, uint32_t offset = 0);
 
-		inline size_t GetSize() const { return m_Size; }
+		inline size_t GetSize() const { return m_Count * sizeof(uint32_t); }
+		inline uint32_t GetCount() const { return m_Count; }
 
 	private:
-		uint32_t m_RendererID;
-		size_t m_Size;
+		uint32_t m_RendererID, m_Count;
 	};
 
 }

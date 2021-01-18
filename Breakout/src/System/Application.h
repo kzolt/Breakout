@@ -22,6 +22,8 @@ namespace Breakout {
 		Window* m_Window;
 		Scene* m_Scene;
 
+		float m_LastFrameTime = 0.0f;
+
 	private:
 		static Application* s_App;
 	};

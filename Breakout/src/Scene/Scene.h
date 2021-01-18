@@ -1,6 +1,18 @@
 #pragma once
 
-#include "Renderer/Renderer.h"
+#include <glm/glm.hpp>
+
+#include "Entity/Paddle.h"
+#include "Entity/Brick.h"
+#include "Entity/Ball.h"
+
+#include "Renderer/Shader.h"
+#include "Renderer/Camera.h"
+
+// ---- Remove ----
+#include "Graphics/VertexArray.h"
+#include "Graphics/Buffer.h"
+// ----------------
 
 namespace Breakout {
 
@@ -10,11 +22,22 @@ namespace Breakout {
 		Scene();
 		~Scene();
 
-		void OnUpdate();
+		void OnUpdate(Timestep ts);
 		void OnRender();
 
 	private:
-		Renderer m_Renderer;
+		Paddle* m_Paddle;
+		Ball* m_Ball;
+		std::vector<Brick*> m_Bricks;
+
+		Camera* m_Camera;
+		Shader* m_Shader;
+
+		// TODO: Remove
+		std::shared_ptr<VertexArray> m_VA;
+		std::shared_ptr<VertexBuffer> m_VBO;
+		std::shared_ptr<IndexBuffer> m_IB;
+
 	};
 
 }

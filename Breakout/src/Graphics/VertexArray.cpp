@@ -63,7 +63,7 @@ namespace Breakout {
 		m_VertexBuffers.push_back(vertexBuffer);
 	}
 
-	void VertexArray::AddIndexBuffer(std::shared_ptr<IndexBuffer> indexBuffer)
+	void VertexArray::SetIndexBuffer(std::shared_ptr<IndexBuffer> indexBuffer)
 	{
 		Bind();
 		indexBuffer->Bind();

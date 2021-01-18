@@ -13,7 +13,7 @@ namespace Breakout {
 		void Bind();
 
 		void AddVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer);
-		void AddIndexBuffer(std::shared_ptr<IndexBuffer> indexBuffer);
+		void SetIndexBuffer(std::shared_ptr<IndexBuffer> indexBuffer);
 
 		inline std::shared_ptr<IndexBuffer> GetIndexBuffer() { return m_IndexBuffer; }
 		inline const std::vector<std::shared_ptr<VertexBuffer>> &GetVertexBuffers() { return m_VertexBuffers; }

@@ -29,7 +29,7 @@ namespace Breakout {
 		return !glfwWindowShouldClose(m_Window);
 	}
 
-	void Window::OnUpdate()
+	void Window::OnUpdate(Timestep ts)
 	{
 		glfwPollEvents();
 	}
