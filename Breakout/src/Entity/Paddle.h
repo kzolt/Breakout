@@ -11,6 +11,7 @@ namespace Breakout {
 			: Entity(std::string("Paddle"), position, size, color) {}
 		~Paddle() {}
 
+		void OnUpdate(Timestep ts);
 	};
 
 }

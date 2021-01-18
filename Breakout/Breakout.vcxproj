@@ -96,6 +96,7 @@
     <ClCompile Include="src\bkout.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Graphics\Buffer.cpp" />
     <ClCompile Include="src\Graphics\VertexArray.cpp" />
     <ClCompile Include="src\Renderer\Camera.cpp" />
@@ -106,6 +107,7 @@
     <ClCompile Include="src\Tools\Log.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\System\Application.cpp" />
+    <ClCompile Include="src\Tools\Random.cpp" />
     <ClCompile Include="vendor\GLAD\src\glad.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -126,6 +128,7 @@
     <ClInclude Include="src\Tools\Assert.h" />
     <ClInclude Include="src\Tools\Log.h" />
     <ClInclude Include="src\System\Application.h" />
+    <ClInclude Include="src\Tools\Random.h" />
     <ClInclude Include="src\Tools\Timestep.h" />
     <ClInclude Include="vendor\GLAD\include\glad\glad.h" />
   </ItemGroup>

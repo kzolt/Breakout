@@ -22,11 +22,12 @@ namespace Breakout {
 		float xpos = -13.2f;
 		float ypos = 7.0f;
 		glm::vec4 brickColor = glm::vec4(0.501f, 0.0f, 0.125f, 1.0f);
+		float healths[] = {40, 30, 20, 10};
 		for (int x = 0; x < 4; x++)
 		{
 			for (int y = 0; y < 6; y++)
 			{
-				m_Bricks.push_back(new Brick(glm::vec3(xpos, ypos, 0.0f), brickColor, (x == 0 ? 1 : x * 10)));
+				m_Bricks.push_back(new Brick(glm::vec3(xpos, ypos, 0.0f), brickColor, healths[x]));
 				xpos += 5.3;
 			}
 
@@ -52,24 +53,19 @@ namespace Breakout {
 	void Scene::OnUpdate(Timestep ts)
 	{
 		// Paddle Movement (Note: Only works in 16:9 aspect ratio)
-		auto mousePos = Application::GetWindow()->GetMousePos();									// Get Mouse Position (Screen Space)
-		auto mousePosRel = mousePos.first / Application::GetWindow()->GetWindowProps().Width;		// Convert Mouse Position from Screen Width to value between 0 and 1
-		float mouseX = (mousePosRel * 32) - 16;														// Convert between 0 and 1 to -16 and 16
-
-		// Set Position
-		m_Paddle->GetPosition().x = mouseX;
-
-		// If mouse goes beyond bounds set the position of the paddle to the edge of the screen
-		if (mouseX <= -13.5f)
-			m_Paddle->GetPosition().x = -13.5f;
-		if (mouseX >= 13.5f)
-			m_Paddle->GetPosition().x = 13.5f;
-
-		LOG_TRACE("{0}", mouseX);
+		m_Paddle->OnUpdate(ts);
 
 		// Ball Movement
+		m_Ball->OnUpdate(ts, m_Paddle);
 
 		// Brick Stuff
+		for (size_t i = 0; i < m_Bricks.size(); i++)
+		{
+			m_Bricks[i]->OnUpdate(ts, m_Ball);
+
+			if (m_Bricks[i]->GetHealth() < 0)
+				m_Bricks.erase(m_Bricks.begin() + i);
+		}
 	}
 
 	void Scene::OnRender()

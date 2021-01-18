@@ -20,7 +20,7 @@ namespace Breakout {
 		inline const glm::vec4& GetColor() const { return m_Color; }
 		inline glm::vec4& GetColor() { return m_Color; }
 
-	private:
+	protected:
 		std::string m_DebugName;
 
 		glm::vec3 m_Position;

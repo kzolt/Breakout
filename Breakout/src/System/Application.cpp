@@ -22,6 +22,8 @@ namespace Breakout {
 
 	void Application::Start()
 	{
+		Random::Init();
+
 		Log::Init();
 		LOG_INFO("Log Initialized");
 
