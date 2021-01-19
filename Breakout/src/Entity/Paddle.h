@@ -4,6 +4,11 @@
 
 namespace Breakout {
 
+	enum class PaddleDirection
+	{
+		Left = 0, Right, Stationary
+	};
+
 	class Paddle : public Entity
 	{
 	public:
@@ -11,7 +16,13 @@ namespace Breakout {
 			: Entity(std::string("Paddle"), position, size, color) {}
 		~Paddle() {}
 
+		inline PaddleDirection GetDirection() const { return m_CurrentDirection; }
+
 		void OnUpdate(Timestep ts);
+
+	private:
+		PaddleDirection m_CurrentDirection;
+		float m_LastMousePosition;
 	};
 
 }

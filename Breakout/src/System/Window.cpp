@@ -17,6 +17,8 @@ namespace Breakout {
 
 		glfwMakeContextCurrent(m_Window);
 		ASSERT(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress), "Failed to initialize OpenGL Context");
+
+		glfwSwapInterval(1);
 	}
 
 	Window::~Window()
