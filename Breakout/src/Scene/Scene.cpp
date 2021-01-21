@@ -17,12 +17,16 @@ namespace Breakout {
 
 		m_Paddle = new Paddle(glm::vec3(0.0f, -7.0f, 0.0f), glm::vec2(5.0f, 1.0f));
 		m_Ball = new Ball(glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1.0f, 1.0f));
+		m_BallTexture = new Texture("res/textures/ball.png");
+
+		m_BallTexture->Bind();
+		m_Shader->SetInt("u_Texture", 0);
 
 		// Bricks
 		float xpos = -13.2f;
-		float ypos = 7.0f;
+		float ypos = 6.5f;
 		glm::vec4 brickColor = glm::vec4(0.501f, 0.0f, 0.125f, 1.0f);
-		float healths[] = {40, 30, 20, 10};
+		float healths[] = { 40, 30, 20, 10 };
 		for (int x = 0; x < 4; x++)
 		{
 			for (int y = 0; y < 6; y++)
@@ -41,11 +45,12 @@ namespace Breakout {
 
 	Scene::~Scene()
 	{
+		delete m_BallTexture;
 		delete m_Paddle;
 		delete m_Ball;
 		for (size_t i = 0; i < m_Bricks.size(); i++)
 			delete m_Bricks[i];
-
+		
 		delete m_Camera;
 		delete m_Shader;
 	}
@@ -66,6 +71,9 @@ namespace Breakout {
 			if (m_Bricks[i]->GetHealth() < 0)
 				m_Bricks.erase(m_Bricks.begin() + i);
 		}
+
+		if (m_Bricks.empty())
+			m_Ball->GetSpeed() = { 0.0f, 0.0f };
 	}
 
 	void Scene::OnRender()

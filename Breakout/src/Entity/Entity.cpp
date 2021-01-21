@@ -77,7 +77,7 @@ namespace Breakout {
 			if (m_Speed.x > 0 && paddle->GetDirection() == PaddleDirection::Right)
 				m_Speed.y *= -1;
 			else if (m_Speed.x > 0 && paddle->GetDirection() == PaddleDirection::Left)
-				m_Speed.y *= -1;
+				m_Speed *= -1;
 
 			// If the paddle hasn't moved from it's spot then bounce in a random direction (to keep people on their toes)
 			if (paddle->GetDirection() == PaddleDirection::Stationary)
@@ -106,7 +106,10 @@ namespace Breakout {
 			m_Health -= 11;
 			m_Color.r -= 0.1f;
 
-			ball->GetSpeed() *= -1;
+			if (Random::Float() < 0.5f)
+				ball->GetSpeed() *= -1;
+			else
+				ball->GetSpeed().y *= -1;
 		}
 	}
 

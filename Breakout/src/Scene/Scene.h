@@ -8,11 +8,7 @@
 
 #include "Renderer/Shader.h"
 #include "Renderer/Camera.h"
-
-// ---- Remove ----
-#include "Graphics/VertexArray.h"
-#include "Graphics/Buffer.h"
-// ----------------
+#include "Renderer/Texture.h"
 
 namespace Breakout {
 
@@ -32,6 +28,8 @@ namespace Breakout {
 
 		Camera* m_Camera;
 		Shader* m_Shader;
+
+		Texture* m_BallTexture;
 	};
 
 }
