@@ -8,9 +8,10 @@ namespace Breakout {
 	{
 		std::string Title;
 		uint32_t Width, Height;
+		bool Minimized;
 
 		WindowProps(const std::string& title = "Breakout", uint32_t width = 1280, uint32_t height = 720)
-			: Title(title), Width(width), Height(height) {}
+			: Title(title), Width(width), Height(height), Minimized(false) {}
 	};
 
 	class Window
@@ -21,7 +22,8 @@ namespace Breakout {
 
 		inline const WindowProps& GetWindowProps() const { return m_Props; }
 
-		bool IsRunning();
+		bool IsRunning() const;
+		bool IsMinimized() const { return m_Props.Minimized; }
 
 		void OnUpdate(Timestep ts);
 		void OnRender();

@@ -12,13 +12,22 @@ namespace Breakout {
 	{
 		ASSERT(glfwInit(), "Unable to Initalize GLFW");
 
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+
 		m_Window = glfwCreateWindow(windowProps.Width, windowProps.Height, windowProps.Title.c_str(), NULL, NULL);
 		ASSERT(m_Window, "Unable to create GLFW window");
 
 		glfwMakeContextCurrent(m_Window);
 		ASSERT(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress), "Failed to initialize OpenGL Context");
 
+		glfwSetWindowUserPointer(m_Window, &m_Props);
 		glfwSwapInterval(1);
+
+		// Handle Minimization (Inconification)
+		glfwSetWindowFocusCallback(m_Window, [](GLFWwindow* window, int iconify) {
+				WindowProps& data = *(WindowProps*)glfwGetWindowUserPointer(window);
+				data.Minimized = !((bool)iconify);
+			});
 	}
 
 	Window::~Window()
@@ -27,7 +36,7 @@ namespace Breakout {
 		glfwTerminate();
 	}
 
-	bool Window::IsRunning()
+	bool Window::IsRunning() const
 	{
 		return !glfwWindowShouldClose(m_Window);
 	}

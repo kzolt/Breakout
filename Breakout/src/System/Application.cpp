@@ -45,10 +45,13 @@ namespace Breakout {
 
 			m_Window->OnUpdate(timestep);
 
-			m_Scene->OnUpdate(timestep);
-			m_Scene->OnRender();
+			if (!m_Window->IsMinimized())
+			{
+				m_Scene->OnUpdate(timestep);
+				m_Scene->OnRender();
 
-			m_Window->OnRender();
+				m_Window->OnRender();
+			}
 		}
 	}
 
