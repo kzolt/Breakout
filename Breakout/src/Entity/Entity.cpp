@@ -105,6 +105,7 @@ namespace Breakout {
 		{
 			m_Health -= 11;
 			m_Color.r -= 0.1f;
+			ball->GetScore() += 10;
 
 			if (Random::Float() < 0.5f)
 				ball->GetSpeed() *= -1;

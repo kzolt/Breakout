@@ -17,7 +17,7 @@ namespace Breakout {
 		~Paddle() {}
 
 		inline PaddleDirection GetDirection() const { return m_CurrentDirection; }
-
+		
 		void OnUpdate(Timestep ts);
 
 	private:
