@@ -14,7 +14,9 @@ namespace Breakout {
 		}
 
 		inline glm::vec2& GetSpeed() { return m_Speed; }
-		inline int& GetScore() { return m_Score; }
+		
+		inline int GetScore() { return m_Score; }
+		inline void IncrementScore(int value) { m_Score += value; }
 
 		void OnUpdate(Timestep ts, Paddle* paddle);
 

@@ -89,11 +89,21 @@ namespace Breakout {
 			}
 		}
 
-		// Bounds Check
-		if (m_Position.x <= -16.0f || m_Position.x >= 16.0f)
+		// Bounds Check to see if ball hits edge
+		if (m_Position.x <= -15.8f || m_Position.x >= 15.8f)
 			m_Speed.x *= -1.0f;
-		if (m_Position.y <= -9.0f || m_Position.y >= 9.0f)
+		if (m_Position.y <= -8.8f || m_Position.y >= 8.8f)
 			m_Speed.y *= -1.0f;
+
+		// Bounds Check to see if we're outside the play field
+		if (m_Position.x > 16.0f)
+			m_Position.x -= 0.5f;
+		if (m_Position.x < -16.0f)
+			m_Position.x += 0.5f;
+		if (m_Position.y < -9.0f)
+			m_Position.y += 0.5f;
+		if (m_Position.y > 9.0f)
+			m_Position.y -= 0.5f;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////
@@ -105,7 +115,7 @@ namespace Breakout {
 		{
 			m_Health -= 11;
 			m_Color.r -= 0.1f;
-			ball->GetScore() += 10;
+			ball->IncrementScore(10);
 
 			if (Random::Float() < 0.5f)
 				ball->GetSpeed() *= -1;

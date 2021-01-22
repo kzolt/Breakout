@@ -4,16 +4,26 @@
 layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec4 a_Color;
 layout(location = 2) in vec2 a_TexCoord;
+layout(location = 3) in float a_TexIndex;
+layout(location = 4) in float a_TilingFactor;
 
-out vec4 v_Color;
-out vec2 v_TexCoord;
+out VertexOutput
+{
+vec4  Color;
+vec2  TexCoord;
+float TexIndex;
+float TilingFactor;
+} vs_Output;
 
 uniform mat4 u_ViewProjection;
 
 void main()
 {
-	v_Color = a_Color;
-	v_TexCoord = a_TexCoord;
+	vs_Output.Color = a_Color;
+	vs_Output.TexCoord = a_TexCoord;
+	vs_Output.TexIndex = a_TexIndex;
+	vs_Output.TilingFactor = a_TilingFactor;
+
 	gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
 }
 
@@ -22,16 +32,17 @@ void main()
 
 layout(location = 0) out vec4 color;
 
-in vec4 v_Color;
-in vec2 v_TexCoord;
+in VertexOutput
+{
+vec4  Color;
+vec2  TexCoord;
+float TexIndex;
+float TilingFactor;
+} vs_Input;
 
-uniform sampler2D u_Texture;
+uniform sampler2D u_Textures[32];
 
 void main()
 {
-	if (v_Color == vec4(0.0f))
-		color = texture(u_Texture, v_TexCoord);
-	else
-		color = v_Color;
-
+	color = texture(u_Textures[int(vs_Input.TexIndex)], vs_Input.TexCoord * vs_Input.TilingFactor) * vs_Input.Color;
 }

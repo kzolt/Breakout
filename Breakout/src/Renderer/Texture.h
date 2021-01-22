@@ -13,6 +13,11 @@ namespace Breakout {
 
 		void Bind(uint32_t slot = 0) const;
 
+		bool operator==(const Texture& other)
+		{
+			return m_RendererID == other.m_RendererID;
+		}
+
 	private:
 		uint32_t m_RendererID;
 		uint32_t m_Width, m_Height;

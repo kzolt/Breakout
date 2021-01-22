@@ -3,7 +3,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Entity/Paddle.h"
 #include "Scene.h"
 #include "Renderer/Renderer.h"
 #include "System/Application.h"
@@ -11,17 +10,15 @@
 namespace Breakout {
 
 	Scene::Scene()
+		: m_ScoreLabel(Label("Score: ", glm::vec3(-10.0f, -8.0f, 0.0f), glm::vec4(1.0f))),
+		  m_ScoreLabelValue(Label("0", glm::vec3(-8.0f, -8.0f, 0.0f), glm::vec4(1.0f)))
 	{
-		m_Shader = new Shader("res/shaders/basic.glsl");
 		m_Camera = new Camera(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
 
 		m_Paddle = new Paddle(glm::vec3(0.0f, -7.0f, 0.0f), glm::vec2(5.0f, 1.0f));
 		m_Ball = new Ball(glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1.0f, 1.0f));
-		m_BallTexture = new Texture("res/textures/ball.png");
-
-		m_BallTexture->Bind();
-		m_Shader->SetInt("u_Texture", 0);
-
+		m_BallTexture = std::make_shared<Texture>("res/textures/ball.png");
+		
 		// Bricks
 		float xpos = -13.2f;
 		float ypos = 6.5f;
@@ -45,14 +42,12 @@ namespace Breakout {
 
 	Scene::~Scene()
 	{
-		delete m_BallTexture;
 		delete m_Paddle;
 		delete m_Ball;
 		for (size_t i = 0; i < m_Bricks.size(); i++)
 			delete m_Bricks[i];
 		
 		delete m_Camera;
-		delete m_Shader;
 	}
 
 	void Scene::OnUpdate(Timestep ts)
@@ -74,14 +69,15 @@ namespace Breakout {
 
 		if (m_Bricks.empty())
 			m_Ball->GetSpeed() = { 0.0f, 0.0f };
+
+		// Update Score
+		m_ScoreLabelValue.SetText(std::to_string(m_Ball->GetScore()));
 	}
 
 	void Scene::OnRender()
 	{
 		Renderer::Clear();
-		m_Shader->Bind();
-		m_Shader->SetMat4("u_ViewProjection", m_Camera->GetViewProjection());
-
+		
 		// Render
 		Renderer::BeginScene(m_Camera->GetViewProjection());
 		Renderer::DrawQuad(m_Paddle->GetPosition(), m_Paddle->GetSize(), m_Paddle->GetColor());
@@ -89,7 +85,10 @@ namespace Breakout {
 		for (size_t i = 0; i < m_Bricks.size(); i++)
 			Renderer::DrawQuad(m_Bricks[i]->GetPosition(), m_Bricks[i]->GetSize(), m_Bricks[i]->GetColor());
 
-		Renderer::DrawQuad(m_Ball->GetPosition(), m_Ball->GetSize(), m_Ball->GetColor());
+		Renderer::DrawQuad(m_Ball->GetPosition(), m_Ball->GetSize(), m_BallTexture);
+
+		Renderer::DrawLabel(m_ScoreLabel);
+		//Renderer::DrawLabel(m_ScoreLabelValue);
 
 		Renderer::EndScene();
 	}

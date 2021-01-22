@@ -5,6 +5,7 @@
 #include "Entity/Paddle.h"
 #include "Entity/Brick.h"
 #include "Entity/Ball.h"
+#include "Entity/Label.h"
 
 #include "Renderer/Shader.h"
 #include "Renderer/Camera.h"
@@ -26,10 +27,12 @@ namespace Breakout {
 		Ball* m_Ball;
 		std::vector<Brick*> m_Bricks;
 
-		Camera* m_Camera;
-		Shader* m_Shader;
+		Label m_ScoreLabel;
+		Label m_ScoreLabelValue;
 
-		Texture* m_BallTexture;
+		Camera* m_Camera;
+
+		std::shared_ptr<Texture> m_BallTexture;
 	};
 
 }
